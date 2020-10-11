@@ -9,22 +9,26 @@ import Button from 'react-bootstrap/Button';
 const modalData = {
   1: {
     title: 'Potencia Motor',
+    subtitle: 'Valores óptimos [0 - 30]',
     body:
       'Ingrese la potencia a transmitir, en kw, de la rueda motora acoplada al motor eléctrico.',
   },
   2: {
     title: 'Velocidad Polea Motora',
+    subtitle: 'Valores óptimos [720 - 2880]',
     body:
       'Ingrese la velocidad, en rpm, de la rueda motora acoplada al motor eléctrico.',
   },
   3: {
     title: 'Relación de Transmisión',
+    subtitle: 'Valores óptimos [1 - 4]',
     body: 'Ingrese la relacíon de transmisión adoptada para el par de ruedas.',
   },
   4: {
     title: 'Factor de Servicio',
+    subtitle: 'Valores óptimos [1 - 3]',
     body:
-      'Factor de mayoración que se aplica sobre la potencia a transmitir con el fin de contemplar el tipo de servicio al cual esté sometida la transmisión',
+      'Factor de mayoración que se aplica sobre la potencia a transmitir con el fin de contemplar el tipo de servicio al cual esté sometida la transmisión.',
   },
 };
 
@@ -41,7 +45,14 @@ const Title = styled.h1`
   // text-decoration-thickness: 0.8px;
 `;
 
-const MyForm = ({ setData, setShow, setLoading, show }) => {
+const MyForm = ({
+  setData,
+  setShow,
+  setLoading,
+  setIsError,
+  show,
+  isError,
+}) => {
   return (
     <Formik
       initialValues={{
@@ -76,6 +87,9 @@ const MyForm = ({ setData, setShow, setLoading, show }) => {
         if (!show) {
           setShow(true);
         }
+        if (isError) {
+          setIsError(false);
+        }
         setSubmitting(true);
         setLoading(true);
         const {
@@ -90,6 +104,7 @@ const MyForm = ({ setData, setShow, setLoading, show }) => {
           );
           setData(res.data);
         } catch (error) {
+          setIsError(true);
           console.log(error);
         }
         setSubmitting(false);

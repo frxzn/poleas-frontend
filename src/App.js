@@ -12,8 +12,22 @@ const Container = styled.div`
   color: rgb(77, 81, 86);
 `;
 
+const checkEmpty = (data) => {
+  for (const i in data) {
+    for (const j in data[i]) {
+      for (const k in data[i][j]) {
+        if (data[i][j][k] !== 0) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+};
+
 function App() {
   const [show, setShow] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({
     perfil_A: {
@@ -82,7 +96,37 @@ function App() {
         </div>
       );
     } else {
-      render = <Table data={data} />;
+      if (isError) {
+        render = (
+          <p>
+            Hubo un problema con el servidor. Intente de nuevo en unos minutos.
+          </p>
+        );
+      } else {
+        if (!checkEmpty(data)) {
+          render = <Table data={data} />;
+        } else {
+          render = (
+            <>
+              <p>
+                No se encontraron resultados para esa combinación de valores.
+                <br />
+                Esto puede suceder en casos de borde por los siguientes motivos:
+              </p>
+              <ul>
+                <li>
+                  Cualquier par de ruedas satisface la potencia a transmitir.
+                </li>
+                <li>
+                  Ningun par de ruedas satisface la potencia a transmitir.
+                </li>
+                <li>La relacion de transmision es muy grande.</li>
+              </ul>
+              <p>Intente cambiando los valores.</p>
+            </>
+          );
+        }
+      }
     }
   }
 
@@ -101,7 +145,9 @@ function App() {
           setData={setData}
           setShow={setShow}
           setLoading={setLoading}
+          setIsError={setIsError}
           show={show}
+          isError={isError}
         />
         {render}
       </Container>

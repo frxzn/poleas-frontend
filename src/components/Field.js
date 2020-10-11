@@ -23,6 +23,7 @@ const Input = styled.input`
 
 const Error = styled.div`
   margin-top: 8px;
+  color: #ca0b00;
 `;
 
 const InputContainer = styled.div`
